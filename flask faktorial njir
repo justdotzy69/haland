@@ -1,0 +1,45 @@
+from flask import Flask, request
+import math
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return '''
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
+                    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); font-family: Arial, sans-serif;">
+            <h1 style="color: #333;">Program Faktorial</h1>
+            <form method="POST" action="/calculate" style="text-align: center;">
+                <label for="number" style="font-size: 18px;">Masukkan Angka:</label><br>
+                <input type="number" id="number" name="number" required
+                       style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; margin-top: 10px;"><br><br>
+                <button type="submit" style="padding: 10px 20px; font-size: 16px; color: white; background-color: #007BFF; border: none; border-radius: 5px; cursor: pointer;">Hitung Faktorial</button>
+            </form>
+        </div>
+    '''
+
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    try:
+        number = int(request.form['number'])
+        factorial_result = math.factorial(number)
+        return f'''
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
+                        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); font-family: Arial, sans-serif;">
+                <h1 style="color: #333;">Hasil Faktorial</h1>
+                <p style="font-size: 20px;">Faktorial dari {number} adalah <strong>{factorial_result}</strong></p>
+                <a href="/" style="margin-top: 20px; font-size: 16px; color: #007BFF; text-decoration: none;">Hitung Lagi</a>
+            </div>
+        '''
+    except ValueError:
+        return '''
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
+                        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); font-family: Arial, sans-serif;">
+                <h1 style="color: #FF6347;">Error</h1>
+                <p style="font-size: 18px;">Masukkan angka yang valid!</p>
+                <a href="/" style="margin-top: 20px; font-size: 16px; color: #007BFF; text-decoration: none;">Kembali</a>
+            </div>
+        '''
+
+if __name__ == '__main__':
+    app.run(debug=True)
